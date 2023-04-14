@@ -1,0 +1,54 @@
+version: "3.9"
+services:
+  postgresdb:
+    image: postgres
+    container_name: postgresdb
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres-db:/data/postgres
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+      - 5050:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@postgres.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    volumes:
+      - pgadmin-data:/data/postgres
+
+  redis:
+    image: redis:7.0-alpine
+    container_name: redis
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass password
+    networks:
+      - default
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: azurite
+    restart: always
+    ports:
+      - 10000:10000
+      - 10001:10001
+      - 10002:10002
+
+volumes:
+  postgres-db:
+    driver: local
+  pgadmin-data:
+    driver: local
+  redis:
+    driver: local
