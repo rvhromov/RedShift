@@ -16,6 +16,7 @@ The structure is the following:
 - MediatR
 - Redis
 - Postgres
+- Azure Blob Storage
 
 # Requirements
 
